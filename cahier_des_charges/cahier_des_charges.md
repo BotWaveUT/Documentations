@@ -14,6 +14,8 @@
 <br>
 <br>
 <br>
+<br>
+<br>
 
 
 <h1 align="center">Projet Synthèse Sonore <br> Cahier des charges</h1>
@@ -23,7 +25,6 @@
 
 <div align="center" style="font-size: 1.5em">Groupe BotWave : <br>Arthur ARNOLD, Paul CLUZEL, Tinhinane AIT-MESSAOUD, Noémie GIREAUD</div>
 
-<br>
 <br>
 <br>
 <br>
@@ -95,21 +96,19 @@ Il s’agit de concevoir et réaliser un synthétiseur sonore numérique sur une
 Ce projet combine des aspects techniques comme la programmation bare-metal, la gestion d’interfaces matérielles mais aussi un aspect créatif avec différentes sorties sonores, un enrichissement de l’interface permettant de proposer un synthétiseur plus complet et de choisir une qualité de rendu sonore.
 
 Le développement se fera en bare-metal sur une carte Raspberry PI avec la librairie Circle permettant de simplifier le code bare-metal de l’environnement grâce à l’accès direct aux périphériques.
-Le son sera transmis via le protocole I²S et ensuite converti en signal analogique grâce au DAC.
+Les échantillonages de la fréquence sonore seront transmis via le protocole I²S vers un DAC qui va ensuite les convertir en signal analogique sur cable jack.
 
 Ce cadre permet de rencontrer les problématiques du domaine des systèmes embarqués avec les contraintes de temps réel, de la gestion des périphériques et d’une optimisation du code.
 
 ## Objectifs
 
-L’objectif de ce projet est de concevoir un système complet de synthèse sonore embarqué allant du signal audio à son contrôle via une interface physique.
-
-
+L’objectif de ce projet est de concevoir un système complet de synthèse sonore embarqué allant de la génération d'un signal audio jusqu'à son contrôle via une interface physique.
 
 Le résultat attendu comprend :
-La génération d’une forme d’onde
-Une latence très faible (< 10ms) entre l’action et le son produit
+- La génération d’un son prédéfini
+- Une latence très faible (< 10ms) entre le déclanchement et la production du son
 
-Le projet doit également démontrer la maîtrise de la programmation bare metal sur Raspberry Pi, une gestion d’interface matérielles (GPIO, I²S, DAC), la mise en oeuvre d’algorithmes de synthèses sonores ainsi qu’une documentation pour expliquer le fonctionnement du synthétiseur.
+Le projet doit également démontrer la maîtrise de la programmation bare metal sur Raspberry Pi, une gestion d’interface matérielles (GPIO, I²S, DAC), la mise en oeuvre d’algorithmes de synthèses sonores ainsi qu’une documentation complête expliquant le fonctionnement du synthétiseur.
 
 # 2 - Analyse de l'existant et des risques : 
 
@@ -118,27 +117,36 @@ Le projet doit également démontrer la maîtrise de la programmation bare metal
 La version finale du cahier des charges ci-présent doit être remise début décembre. Pour garantir l’optimalité de celui-ci, des rendus intermédiaires bi-mensuels seront livrés aux encadrants du projet.
 La partie technique du projet doit être achevée avant la fin du second semestre.
 
-Le temps de travail doit être articulé autour du créneau alloué à cet effet, du temps libre des étudiants ainsi que de celui de l’encadrant. Face à cette contrainte, nous encourons le risque d’incompatibilité des disponibilités, ainsi qu’une charge de travail académique supérieure au temps allouable à l’avancement du projet.
-Afin d’éviter les risques évoqués précédemment, les membres de l’équipe devront porter une forte attention au développement et attribution des différentes tâches pour le planning initial, et le respect des jalons de rendus tout le long du projet.
+Le temps de travail doit être articulé autour du créneau alloué à cet effet, du temps libre des étudiants ainsi que de celui de l’encadrant.   
+
+Pour continer, nous devons suivres plusieurs methodes organisationnelles dont une différenciation des rôles de tous les membres de l'équipe, une répartition équitable des tâches ainsi qu'un diagramme de Gantt afin de visualiser l'avancement des tâches dans le temps.
+
+Finalement, des réunions régulière doivent être organisées entre le groupe et son superviseur. L'interval de temps entre les réunions peut varier en fonction de l'avancée dans le travail, mais un contacte doit être établit au moins 1 fois par mois.
 
 ## Contraintes techniques :
 
- Le projet s’articulant autour d’un matériel physique, l’ensemble de l’équipe a besoin d’être présente de manière physique pour les différents tests, empêchant le travail à distance.
-Manque de connaissances : L’ensemble des éléments abordés par le projet n’ayant pas été étudié auparavant par l’ensemble des membres, une mise à niveau s’impose pouvant ainsi retarder l’avancée si trop complexe.
-La définition et le test d’un Proof of Concept (POC) en amont du projet est nécessaire afin d’éviter toute mauvaise surprise quant à l’interopérabilité des composants choisis et le fonctionnement de la solution.
-L’architecture du système devra être modulaire et extensible, permettant l’intégration de nouveaux modules ou fonctionnalités destinées à l’implémentation d’instruments de musique supplémentaires.
+Le matériel utilisé lors du projet n’ayant pas été étudié auparavant par l’ensemble des membres, une mise à niveau peut s'imposer afin que tous puissent le manipuler correctement. Si la mise à niveau trop complexe, cela pourait ainsi retarder l’avancée du projet.  
+
+La définition et le test d’un Proof of Concept (POC) en amont du projet est nécessaire afin d’éviter toute mauvaise surprise quant à l’interopérabilité des composants choisis et le fonctionnement de la solution.  
+
+L’architecture du système devra être modulaire et extensible, permettant l’intégration de nouveaux modules ou fonctionnalités destinées à l’implémentation d’instruments de musique supplémentaires.  
+
 Le projet étant amené à être repris par l’encadrant ou par d’autres étudiants, une documentation technique claire et précise doit être rédigée tout au long du développement.
 
 ## Contraintes humaines : 
 
-	La réussite du projet repose sur la collaboration et l’investissement de l’ensemble des membres de l’équipe. Les différences de niveau technique, disponibilité et motivation peuvent représenter un frein à la bonne avancée du projet.
-	L’absence ou incapacité de travail d’un membre du groupe est un risque toujours présent, auquel cas, les autres membres devraient pouvoir prendre le relais et repenser la répartition.
+Le projet s’articulant autour d’un matériel physique, l’ensemble de l’équipe à besoin d’être présent physiquement pour effectuer les différents tests. Cela risque d'empêcher le travail à distance si un partage des ressource n'est pas organisé au préalable.
+
+La réussite du projet repose sur la collaboration et l’investissement de l’ensemble des membres de l’équipe. Les différences de niveau technique, disponibilité et motivation peuvent représenter un frein à la bonne avancée du projet.
+- L’absence ou incapacité de travail d’un membre du groupe est un risque toujours présent, auquel cas, les autres membres devraient pouvoir prendre le relais et repenser la répartition.
+
 Une répartition claire et équilibrée des tâches ainsi qu’une communication régulière sont essentielles pour garantir une progression harmonieuse et un projet réussi.
 
 ## Contraintes financières : 
 
-	Le budget initial du projet doit être inférieur à la valeur transmise par l’enseignant responsable, qui est de $VALUE.
-Le projet s’articulant autour d’un microcontrôleur dont le prix peut être élevé et le remplacement lent voire inaccessible, une attention particulière devra être portée à la manipulation des équipements afin d’éviter toute dégradation matérielle susceptible d’engendrer des dépenses supplémentaires ou des retards. Une solution de secours serait d'emprunter le matériel disponible dans la salle d’étude U3-305.
+Le budget initial du projet doit être inférieur à la valeur transmise par l’enseignant responsable.
+
+Le projet s’articule autour d’un microcontrôleur dont le prix peut être élevé et le remplacement lent voire inaccessible. Une attention particulière devra être portée à la manipulation des équipements afin d’éviter toute dégradation matérielle susceptible d’engendrer des dépenses supplémentaires ou des retards. Une solution de secours serait d'emprunter le matériel disponible dans la salle d’étude U3-305.
 
 # 3 - Analyse des nouveaux besoins
 
@@ -152,22 +160,25 @@ Le projet s’articulant autour d’un microcontrôleur dont le prix peut être 
 ## Cas d'utilisation
 
 ### Cas nominaux :
-- UC1 : L’utilisateur appuie sur une touche (clavier d’un octave seulement)  qui génère
-une fréquence audio calculée qui va sortir par le DAC. (UC1bis : possibilité de superposer plusieurs signaux sonores caractérisés par une fréquence donc plusieurs signaux sonores de différentes fréquences quand on appuie sur plusieurs boutons en même temps)
-- UC2 : au relâchement de la touche par l’utilisateur, arrêt ou décroissance de l’amplitude du signal et donc conséquence sur la sortie DAC
-- UC3 : l’utilisateur augmente ou diminue la hauteur de l’octave initiale avec deux touches, l’un pour augmenter l’octave et l’autre pour la diminuer
-- UC4 : l’utilisateur peut changer grâce à un potentiomètre, le gain en sortie du DAC afin de modifier le volume de l’appareil
+- UC1 : L’utilisateur appuie sur une touche (clavier d’un octave seulement) associé à une certaine note de musique. Cette note sera audible via une sortie jack dès l'appuie sur la touche.
+  - UC1bis : possibilité de superposer différentes notes quand on appuie sur plusieurs boutons en même temps.
+- UC2 : au relâchement de la touche par l’utilisateur, arrêt ou décroissance de l’amplitude du signal jusqu'à que le son devienne inaudible.
+- UC3 : l’utilisateur à la possibilité d'appuyer sur deux touches supplémentaires : un bouton permettra d'augmenter l'octave de la note, tandis que l'autre la diminue.
+- UC4 : l’utilisateur peut utiliser un potentiomètre (ou autre entrée analogique) pour régler le volume sonore de sortie.
 
 ### Cas particuliers :
-- UC5 : l’utilisateur peut passer en 2 modes : un mode pour jouer avec les touches, un autre pour sélectionner un son déjà défini, ce choix s'effectue sur les mêmes boutons correspondant au clavier d’une octave (donc 7 touches de son différents). Le choix du mode se fait grâce à deux boutons différents de tous les autres.
-- UC6 : l’utilisateur peut en appuyant sur un bouton, faire un effet de sustain qui va prolonger le son, on appelle ça une enveloppe ADSR.
+- UC5 : l’utilisateur peut appuyer sur un bouton specifique pour changer le mode des son ressortis : un premier mode permet d'entendre des notes de musiques (DO, Ré, Mi, Fa, Sol, La, Si) tandis qu'un autre mode peut associer un son différent à chaque touche.
+- UC6 : l’utilisateur peut en appuyant sur un bouton, faire un effet de sustain qui va prolonger le son (enveloppe ADSR).
 
 ## Maquette 
 
-Suite aux recommandations de l’encadrant et afin de déterminer la réalisation de la solution proposée, un Proof of Concept est réalisé en amont du produit final. 
-La maquette de cette solution sera composée du matériel disponible en salle 305, avec une raspberry pi en manipulant les timers PCM.La validation de la solution se fera si les sorties sonores du DAC sont cohérentes avec les fréquences des notes mises en entrée. 
+Suite aux recommandations de l’encadrant, afin de déterminer la faisabilité du produit, un Proof of Concept est réalisé en amont du produit final. 
+La maquette de cette solution sera composée du matériel disponible en salle 305 (Raspberry Pi 3, breadbord et fils), ainsi que un DAC externe acheté préalablement. Ce PoC est considéré comme validé si nous parvenons à obtenir un bruit audio via la sortie jack relié au DAC. Cette sortie audio doit être préalablement charactérisé dans la Raspberry.
 
-Une fois la faisabilité confirmée, la solution (finale) s’articulera autour d’un Raspberry Pi relié à un DAC  externe pour l’émission des signaux sonores et à plusieurs boutons montés sur breadboard. Ces boutons représenteront les différentes touches du synthétiseur, chacune associée à une note ou à une fonction spécifique. 
+<div align="center"><img src="./images/PoC.drawio.png" alt="Schema du PoC"> </div>
+
+<br>
+Une fois la faisabilité confirmée, la solution s’articulera autour du même schéma que le PoC :  un Raspberry Pi relié à un DAC  externe pour l’émission des signaux sonores. En plus de cela, nous devont ajouter plusieurs boutons. Ces boutons représenteront les différentes touches du synthétiseur, chacune associée à une note ou à une fonction spécifique. Ils doivent être reliés a la Raspberry afin de controler la sortie sonore attendue.
 
 Dans un premier temps, les tests seront effectués sur breadboard afin de valider le câblage, la communication entre les composants et la stabilité du signal audio. 
 La validation de cette solution, nous permettra le transfert du montage sur un PCB, et résulte sur une solution compacte et sûre, facilitant ainsi la manipulation et les tests à long terme.
@@ -183,47 +194,45 @@ La conformité de la solution finale, par rapport aux exigences initiales, sera 
 Au fur et à mesure de l’avancée du projet, de nouveaux besoins peuvent voir le jour. 
 
 
-
-
-
 ## Identification des risques
-
 Une liste des risques potentiels susceptible de rencontrer durant le développement du projet.
 
-Incompatibilité du matériel
-Composants défectueux
-Bibliothèque Circle incomplète
-Latence excessive
-Bruit audio
-Saturation audio
-Charge du CPU élevée
-Sous-estimation du temps de développement
-Mauvaise soudure
+- Incompatibilité du matériel
+- Indisponibilité de certains membres du groupe ou du superviseur 
+- Composants défectueux
+- Problèmes lors de l'installation de la bibliothèque Circle
+- Prise en main compliquée de la bibliothèque Circle
+- Latence excessive
+- Bruit audio
+- Saturation audio
+- Charge du CPU trop élevée
+- Sous-estimation du temps de développement
+- Mauvaise soudure
 
 ## Matériels mis en œuvre
 
 Pour l’élaboration de notre projet, nous avons besoin de ces matériaux :
 
-7 boutons-poussoirs (switches mécaniques)
-Breadboard taille moyenne (1x400 points)
-Fils mâle-mâle et mâle-femelle
-7 résistances 10 kΩ
-Potentiomètre 10 kΩ
-Résistance 220 Ω
-LED
-Module DAC I2S PCM5102 (sortie jack)
-Enceinte active avec entrée jack 3.5 mm
-Raspberry Pi 3 Model B
-Alimentation secteur 5V 2.5A pour Raspberry Pi
-carte PCB
+- 7 boutons-poussoirs (switches mécaniques)
+- Breadboard taille moyenne (1x400 points)
+- Fils mâle-mâle et mâle-femelle
+- 7 résistances 10 kΩ
+- Potentiomètre 10 kΩ
+- Résistance 220 Ω
+- LED
+- Module DAC I2S PCM5102 (sortie jack)
+- Enceinte active avec entrée jack 3.5 mm
+- Raspberry Pi 4
+- Alimentation secteur 5V 2.5A pour Raspberry Pi
+- carte microcontrolleur PCB
 
 ## Contraintes additionnelles 
 
 
-En addition des contraintes organisationnelles, techniques, humaines et financières, nous pouvons citer plusieurs contraintes peuvent s’appliquer lors de la mise en œuvre et la réalisation du projet.
-sécurité  : il serait souhaitable que le produit soit résistant face à diverses attaques  cherchant à modifier ou détruire l’utilisation du produit tel que décrit dans ce cahier des charges. 
-fiabilité : le produit doit fonctionner comme exigé sur une longue période de temps et ne pas être susceptible à des dysfonctionnement. De même, nous devons nous assurer que l’utilisation de celui-ci ne risque en aucun cas la création d’un accident susceptible de mettre en danger la vie de son utilisateur. 
-calcul : le calcul des fréquences se réalise normalement en utilisant des nombres flottants ( entre -1 et 1). Le matériel utilisé pour la preuve de concept ( STM32F4 ) et la réalisation du projet final ( Raspberry Pi 3 Model B ) comportent tous les deux des FPU ( Floating Point Unit ) qu’il serait judicieux d’utiliser pour les opération de calcul de flottants. Cependant, un risque subsiste que l’utilisation des FPU ou la compatibilité des résultats avec le protocole I2S nous contraignent à utiliser des calculs entiers.
+En addition des contraintes organisationnelles, techniques, humaines et financières, nous pouvons citer plusieurs contraintes qui peuvent s’appliquer lors de la mise en œuvre et la réalisation du projet.
+- sécurité  : il serait souhaitable que le produit soit résistant face à diverses attaques  cherchant à modifier ou détruire l’utilisation du produit tel que décrit dans ce cahier des charges. 
+- fiabilité : le produit doit fonctionner comme exigé sur une longue période de temps et ne pas être susceptible à des dysfonctionnement. De même, nous devons nous assurer que l’utilisation de celui-ci ne risque en aucun cas la création d’un accident susceptible de mettre en danger la vie de son utilisateur. 
+- calcul : le calcul des fréquences se réalise normalement en utilisant des nombres flottants ( entre -1 et 1). Le matériel utilisé pour la preuve de concept et la réalisation du projet final comporte des FPU ( Floating Point Unit ) qu’il serait judicieux d’utiliser pour les opération de calcul de flottants. Cependant, un risque subsiste que l’utilisation des FPU ou la compatibilité des résultats avec le protocole I2S nous contraignent à utiliser des calculs entiers.
 
 ## Modalités de déploiement 
 
@@ -245,13 +254,13 @@ Utilisation d’un kanban pour l’assignation des tâches et l’ordre de prior
 ## Communication avec le client/superviseur
 
 Le chef d’équipe gère la communication, les rendus mais via le serveur Discord, tous les membres peuvent discuter du projet avec Monsieur Rio pour avancer plus rapidement.
-Les membres du groupe s’organisent pour s’affecter des tâches et plusieurs fois par semaine des réunions en interne sont organisées pour faire le point sur l’avancée des tâches, les blocages et les priorités.
+Les membres du groupe s’organisent pour s’affecter des tâches et plusieurs fois par semaine des réunions en interne sont organisées pour faire le point sur l’avancée des tâches, les blocages et les priorités.  
 Les décisions importantes sont notées dans un document de suivi validé par tous les membres.
 
 ## Communication et collaboration au sein du groupe
 
-Utilisation d’un serveur Discord pour simplifier la communication entre les membres du groupe et le client, ainsi tout le monde peut avoir accès aux échanges pour mieux comprendre les besoins et demander de l’aide.
-Un google Drive est mis en place pour stocker tous les fichiers importants permettant le bon déroulement du projet.
+Utilisation d’un serveur Discord pour simplifier la communication entre les membres du groupe et le client, ainsi tout le monde peut avoir accès aux échanges pour mieux comprendre les besoins et demander de l’aide.  
+Un google Drive est mis en place pour stocker tous les fichiers importants permettant le bon déroulement du projet.  
 Une organisation Github a été créée afin d’avoir plusieurs dépôts pour le projet, la documentation. Ainsi nous pouvons centraliser la gestion du projet depuis Github, gérer les priorités via le kanban de l’organisation.
 
 ## Procédure de gestion des risques
