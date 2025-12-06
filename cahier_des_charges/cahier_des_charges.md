@@ -100,6 +100,8 @@ Les échantillonages de la fréquence sonore seront transmis via le protocole I�
 
 Ce cadre permet de rencontrer les problématiques du domaine des systèmes embarqués avec les contraintes de temps réel, de la gestion des périphériques et d’une optimisation du code.
 
+Pour ce qui est de l'interface utilisateur, le choix était libre tant que une action de l'utilisateur menait à la construction d'un son. Ainsi, pour la réalisation de ce projet, nous avons décidé d'implémenter une interface utilisateur semblable à un piano ou synthé. Des touches de claviers représenteront les différentes notes, et d'autres touches supplémentaires pouront être utilisées pour la configuration du son rendu.  
+
 ## Objectifs
 
 L’objectif de ce projet est de concevoir un système complet de synthèse sonore embarqué allant de la génération d'un signal audio jusqu'à son contrôle via une interface physique.
