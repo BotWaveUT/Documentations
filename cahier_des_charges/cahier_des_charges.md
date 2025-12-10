@@ -235,6 +235,8 @@ En addition des contraintes organisationnelles, techniques, humaines et financi�
 - sécurité  : il serait souhaitable que le produit soit résistant face à diverses attaques  cherchant à modifier ou détruire l’utilisation du produit tel que décrit dans ce cahier des charges. 
 - fiabilité : le produit doit fonctionner comme exigé sur une longue période de temps et ne pas être susceptible à des dysfonctionnement. De même, nous devons nous assurer que l’utilisation de celui-ci ne risque en aucun cas la création d’un accident susceptible de mettre en danger la vie de son utilisateur. 
 - calcul : le calcul des fréquences se réalise normalement en utilisant des nombres flottants ( entre -1 et 1). Le matériel utilisé pour la preuve de concept et la réalisation du projet final comporte des FPU ( Floating Point Unit ) qu’il serait judicieux d’utiliser pour les opération de calcul de flottants. Cependant, un risque subsiste que l’utilisation des FPU ou la compatibilité des résultats avec le protocole I2S nous contraignent à utiliser des calculs entiers.
+- Développement bare-metal : Le système doit être développé en bare-metal, sans dépendance à des bibliothèques externes (libCircle), afin de garantir la maîtrise complète de l’initialisation matérielle et du pipeline audio.
+
 
 ## Modalités de déploiement 
 
