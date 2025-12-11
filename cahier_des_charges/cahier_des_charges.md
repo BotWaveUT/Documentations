@@ -34,7 +34,7 @@
 <table width=100%>
   <tr>
     <td align="left">
-        Superviseur : <br>  Mr Emmanuel RIO 
+        Superviseur : <br>  M. Hugues Cassé
     </td>
     <td align="right">
         Version 1 :<br> 12/10/2025
@@ -164,13 +164,13 @@ Le projet s’articule autour d’un microcontrôleur dont le prix peut être é
 ### Cas nominaux :
 - UC1 : L’utilisateur appuie sur une touche (clavier d’un octave seulement) associé à une certaine note de musique. Cette note sera audible via une sortie jack dès l'appuie sur la touche.
   - UC1bis : possibilité de superposer différentes notes quand on appuie sur plusieurs boutons en même temps.
-- UC2 : au relâchement de la touche par l’utilisateur, arrêt ou décroissance de l’amplitude du signal jusqu'à que le son devienne inaudible.
-- UC3 : l’utilisateur à la possibilité d'appuyer sur deux touches supplémentaires : un bouton permettra d'augmenter l'octave de la note, tandis que l'autre la diminue.
+- UC2 : au relâchement de la touche par l’utilisateur, l’arrêt du son est géré par l’implémentation de la phase Release d’une enveloppe d’amplitude de type ADSR, assurant une décroissance progressive du signal jusqu’à ce qu’il devienne inaudible.
+- UC3 : l’utilisateur à la possibilité d'appuyer sur deux touches supplémentaires : un bouton permettra d'ajouter une octave de la note, tandis que l'autre permet de retrancher une octave.
 - UC4 : l’utilisateur peut utiliser un potentiomètre (ou autre entrée analogique) pour régler le volume sonore de sortie.
 
 ### Cas particuliers :
 - UC5 : l’utilisateur peut appuyer sur un bouton specifique pour changer le mode des son ressortis : un premier mode permet d'entendre des notes de musiques (DO, Ré, Mi, Fa, Sol, La, Si) tandis qu'un autre mode peut associer un son différent à chaque touche.
-- UC6 : l’utilisateur peut en appuyant sur un bouton, faire un effet de sustain qui va prolonger le son (enveloppe ADSR).
+- UC6 : l’utilisateur peut en appuyant sur un bouton, faire un effet de sustain audio qui va prolonger le son (partie AD de ADSR).
 
 ## Maquette 
 
@@ -224,8 +224,8 @@ Pour l’élaboration de notre projet, nous avons besoin de ces matériaux :
 - LED
 - Module DAC I2S PCM5102 (sortie jack)
 - Enceinte active avec entrée jack 3.5 mm
-- Raspberry Pi 4
-- Alimentation secteur 5V 2.5A pour Raspberry Pi
+- Raspberry Pi 3
+- Alimentation secteur 5V 2.5A pour  Pi
 - carte microcontrolleur PCB
 
 ## Contraintes additionnelles 
@@ -234,7 +234,7 @@ Pour l’élaboration de notre projet, nous avons besoin de ces matériaux :
 En addition des contraintes organisationnelles, techniques, humaines et financières, nous pouvons citer plusieurs contraintes qui peuvent s’appliquer lors de la mise en œuvre et la réalisation du projet.
 - sécurité  : il serait souhaitable que le produit soit résistant face à diverses attaques  cherchant à modifier ou détruire l’utilisation du produit tel que décrit dans ce cahier des charges. 
 - fiabilité : le produit doit fonctionner comme exigé sur une longue période de temps et ne pas être susceptible à des dysfonctionnement. De même, nous devons nous assurer que l’utilisation de celui-ci ne risque en aucun cas la création d’un accident susceptible de mettre en danger la vie de son utilisateur. 
-- calcul : le calcul des fréquences se réalise normalement en utilisant des nombres flottants ( entre -1 et 1). Le matériel utilisé pour la preuve de concept et la réalisation du projet final comporte des FPU ( Floating Point Unit ) qu’il serait judicieux d’utiliser pour les opération de calcul de flottants. Cependant, un risque subsiste que l’utilisation des FPU ou la compatibilité des résultats avec le protocole I2S nous contraignent à utiliser des calculs entiers.
+- calcul : Dans notre cas, il ne s’agit pas réellement de calculer les fréquences, celles-ci étant fixes et peu nombreuses et pouvant simplement être stockées dans un tableau statique, mais bien de calculer les échantillons audio au fil de l’exécution ; le microcontrôleur disposant d’une FPU, il est préférable d’effectuer toute la synthèse en nombres flottants, beaucoup plus simples à manipuler que les entiers, puis de ne convertir chaque échantillon qu’au dernier moment, lors du remplissage des buffers I2S, en passant d’une valeur flottante comprise entre –1 et 1 à un entier situé dans la plage attendue par l’interface, l’I2S ne posant aucune contrainte sur la méthode de calcul mais seulement sur le format final des données.
 - Développement bare-metal : Le système doit être développé en bare-metal, sans dépendance à des bibliothèques externes (libCircle), afin de garantir la maîtrise complète de l’initialisation matérielle et du pipeline audio.
 
 
