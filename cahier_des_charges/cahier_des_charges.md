@@ -95,12 +95,12 @@ Il s’agit de concevoir et réaliser un synthétiseur sonore numérique sur une
 
 Ce projet combine des aspects techniques comme la programmation bare-metal, la gestion d’interfaces matérielles mais aussi un aspect créatif avec différentes sorties sonores, un enrichissement de l’interface permettant de proposer un synthétiseur plus complet et de choisir une qualité de rendu sonore.
 
-Le développement se fera en bare-metal sur une carte Raspberry PI avec la librairie Circle permettant de simplifier le code bare-metal de l’environnement grâce à l’accès direct aux périphériques.
-Les échantillonages de la fréquence sonore seront transmis via le protocole I²S vers un DAC qui va ensuite les convertir en signal analogique sur cable jack.
+Le développement se fera en bare-metal sur une carte Raspberry PI sans aucune librairie externe. Initialement avec la librairie Circle permettant de simplifier le code bare-metal de l’environnement grâce à l’accès direct aux périphériques mais après les *proofs of concept* nous avons rencontré des problèmes avec son utilisation.
+Les échantillonages du signal sonore seront transmis via le protocole Inter-IC Sound ($I^{2}S$) vers un convertisseur numérique analogique (Digital Analog Converter) qui va ensuite les convertir en signal analogique au niveau ligne.
 
-Ce cadre permet de rencontrer les problématiques du domaine des systèmes embarqués avec les contraintes de temps réel, de la gestion des périphériques et d’une optimisation du code.
+Ce cadre permet de rencontrer les problématiques du domaine des systèmes embarqués avec les contraintes de temps réel, de la gestion des périphériques.
 
-Pour ce qui est de l'interface utilisateur, le choix était libre tant que une action de l'utilisateur menait à la construction d'un son. Ainsi, pour la réalisation de ce projet, nous avons décidé d'implémenter une interface utilisateur semblable à un piano ou synthé. Des touches de claviers représenteront les différentes notes, et d'autres touches supplémentaires pouront être utilisées pour la configuration du son rendu.  
+Pour ce qui est de l'interface utilisateur, le choix était libre tant que une action de l'utilisateur menait à la synthèse du son avec faible latence. Ainsi, pour la réalisation de ce projet, nous avons décidé d'implémenter une interface utilisateur semblable à un piano ou synthétiseur. Des touches de claviers représenteront les différentes notes, et d'autres touches supplémentaires pouront être utilisées pour la configuration du son rendu.  
 
 ## Objectifs
 
@@ -129,7 +129,7 @@ Finalement, des réunions régulière doivent être organisées entre le groupe 
 
 Le matériel utilisé lors du projet n’ayant pas été étudié auparavant par l’ensemble des membres, une mise à niveau peut s'imposer afin que tous puissent le manipuler correctement. Si la mise à niveau trop complexe, cela pourait ainsi retarder l’avancée du projet.  
 
-La définition et le test d’un Proof of Concept (POC) en amont du projet est nécessaire afin d’éviter toute mauvaise surprise quant à l’interopérabilité des composants choisis et le fonctionnement de la solution.  
+La définition et le test d’un *Proof of Concept* (POC) en amont du projet est nécessaire afin d’éviter toute mauvaise surprise quant à l’interopérabilité des composants choisis et le fonctionnement de la solution.  
 
 L’architecture du système devra être modulaire et extensible, permettant l’intégration de nouveaux modules ou fonctionnalités destinées à l’implémentation d’instruments de musique supplémentaires.  
 
@@ -162,8 +162,8 @@ Le projet s’articule autour d’un microcontrôleur dont le prix peut être é
 ## Cas d'utilisation
 
 ### Cas nominaux :
-- UC1 : L’utilisateur appuie sur une touche (clavier d’un octave seulement) associé à une certaine note de musique. Cette note sera audible via une sortie jack dès l'appuie sur la touche.
-  - UC1bis : possibilité de superposer différentes notes quand on appuie sur plusieurs boutons en même temps.
+- UC1 : *(Synthèse monophonique)* L’utilisateur appuie sur une touche (clavier d’un octave seulement) associé à une certaine note de musique. Cette note sera audible via une sortie jack dès l'appuie sur la touche.
+  - UC1bis : *(Synthèse polyphonique)* possibilité de superposer différentes notes quand on appuie sur plusieurs boutons en même temps.
 - UC2 : au relâchement de la touche par l’utilisateur, arrêt ou décroissance de l’amplitude du signal jusqu'à que le son devienne inaudible.
 - UC3 : l’utilisateur à la possibilité d'appuyer sur deux touches supplémentaires : un bouton permettra d'augmenter l'octave de la note, tandis que l'autre la diminue.
 - UC4 : l’utilisateur peut utiliser un potentiomètre (ou autre entrée analogique) pour régler le volume sonore de sortie.
