@@ -255,6 +255,8 @@ Monsieur Cassé est superviseur, son travail est d’accompagner l’équipe tou
 
 Utilisation d’un kanban pour l’assignation des tâches et l’ordre de priorités de celles-ci. Via ce kanban, un diagramme de Gantt est créé pour suivre les deadlines des tâches assignées.
 
+Le diagramme de Gantt ainsi que le kanban sont accessibles sur le lien suivant : https://github.com/orgs/BotWaveUT/projects/1/views/3
+
 ## Communication avec le client/superviseur
 
 Le chef d’équipe gère la communication, les rendus mais via le serveur Discord, tous les membres peuvent discuter du projet avec Monsieur Rio pour avancer plus rapidement.
@@ -280,3 +282,6 @@ Probabilité d’occurrence <br> Gravité de l’impact sur le projet <br> Un sc
 
   - 3) Suivi et mise à jour  
 Les nouveaux risques sont ajoutés, et ceux déjà identifiés sont mis à jour en fonction de l’évolution du projet et des solutions apportées.
+
+
+# 6 - Diagramme de Gantt
