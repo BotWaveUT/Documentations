@@ -34,50 +34,48 @@
 <table width=100%>
   <tr>
     <td align="left">
-        Superviseur : <br>  M. Hugues Cassé
+        Superviseur : <br>  M. Hugues Cassé <br>
+        Client : <br> Emmanuel Rio <br>
     </td>
     <td align="right">
         Version 1 :<br> 12/10/2025
     </td>
     <td align="right">
-        Version 2 :<br> 12/10/2025
+        Version 2 :<br> 1/12/2025
     </td>
     <td align="right">
-        Version 3 :<br> 14/12/2025
+        Version 3 :<br> 17/12/2025
     </td>
   </tr>
 </table>
+
+<div style="page-break-before: always;"></div>
 
 # Sommaire
 
 <!-- TOC -->
 
 - [Sommaire](#sommaire)
-- [1 - Exposé introductif](#1---exposé-introductif)
+- [1 - Exposé introductif](#1---Exposé-introductif)
   - [Contexte](#contexte)
   - [Objectifs](#objectifs)
-- [2 - Analyse de l'existant et des risques :](#2---analyse-de-lexistant-et-des-risques-)
-  - [Contraintes organisationnelles :](#contraintes-organisationnelles-)
-  - [Contraintes techniques :](#contraintes-techniques-)
-  - [Contraintes humaines :](#contraintes-humaines-)
-  - [Contraintes financières :](#contraintes-financières-)
-- [3 - Analyse des nouveaux besoins](#3---analyse-des-nouveaux-besoins)
-  - [Besoins fonctionnels](#besoins-fonctionnels)
-  - [Besoins non-fonctionnels](#besoins-non-fonctionnels)
-- [4 - Description de la solution](#4---description-de-la-solution)
+- [2 - Analyse de l'existant et des risques](#2---Analyse-de-lexistant-et-des-risques)
+  - [Contraintes organisationnelles :](#contraintes-organisationnelles)
+  - [Contraintes techniques :](#contraintes-techniques)
+  - [Contraintes humaines :](#contraintes-humaines)
+  - [Contraintes financières :](#contraintes-financières)
+- [3 - Description de la solution](#3---description-de-la-solution)
   - [Cas d'utilisation](#cas-dutilisation)
-    - [Cas nominaux :](#cas-nominaux-)
-    - [Cas particuliers :](#cas-particuliers-)
+    - [Cas nominaux :](#cas-nominaux)
+    - [Cas particuliers :](#cas-particuliers)
   - [Maquette](#maquette)
   - [Nouveaux besoins](#nouveaux-besoins)
   - [Identification des risques](#identification-des-risques)
   - [Matériels mis en œuvre](#matériels-mis-en-œuvre)
   - [Contraintes additionnelles](#contraintes-additionnelles)
   - [Modalités de déploiement](#modalités-de-déploiement)
-    - [Installation](#installation)
-    - [Formation](#formation)
     - [Documentation](#documentation)
-- [5 - Modalités d'organisation](#5---modalités-dorganisation)
+- [4 - Modalités d'organisation](#4---modalités-dorganisation)
   - [Rôles des intervenants](#rôles-des-intervenants)
   - [Découpage en tâche, assignation, programmation (Gantt)](#découpage-en-tâche-assignation-programmation-gantt)
   - [Communication avec le client/superviseur](#communication-avec-le-clientsuperviseur)
@@ -91,6 +89,7 @@
 <br>
 <br>
 
+<div style="page-break-before: always;"></div>
 
 # 1 - Exposé introductif
 
@@ -118,7 +117,9 @@ Le résultat attendu comprend :
 
 Le projet doit également démontrer la maîtrise de la programmation bare metal sur Raspberry Pi, une gestion d’interface matérielles (GPIO, I²S, DAC), la mise en oeuvre d’algorithmes de synthèses sonores ainsi qu’une documentation complête expliquant le fonctionnement du synthétiseur.
 
-# 2 - Analyse de l'existant et des risques  
+<div style="page-break-before: always;"></div>
+
+# 2 - Analyse de l'existant et des risques
 
 ## Contraintes organisationnelles 
 
@@ -157,14 +158,9 @@ Le budget initial du projet doit être inférieur à la valeur transmise par l�
 
 Le projet s’articule autour d’un microcontrôleur dont le prix peut être élevé et le remplacement lent voire inaccessible. Une attention particulière devra être portée à la manipulation des équipements afin d’éviter toute dégradation matérielle susceptible d’engendrer des dépenses supplémentaires ou des retards. Une solution de secours serait d'emprunter le matériel disponible dans la salle d’étude U3-305.
 
-# 3 - Analyse des nouveaux besoins
+<div style="page-break-before: always;"></div>
 
-## Besoins fonctionnels
-[TODO]
-## Besoins non-fonctionnels
-[TODO]
-
-# 4 - Description de la solution
+# 3 - Description de la solution
 
 ## Cas d'utilisation
 
@@ -247,12 +243,16 @@ En addition des contraintes organisationnelles, techniques, humaines et financi�
 
 ## Modalités de déploiement 
 
-### Installation
-### Formation
 ### Documentation
 
+- **Documentation Utilisateur** :	Guide simple pour l'utilisateur final du synthétiseur : Fonctionnement des touches/boutons. Réglage du volume. Procédure de démarrage et d'arrêt.
 
-# 5 - Modalités d'organisation
+- **Documentation Technique	Pour les développeurs/mainteneurs** : Structure du code et conventions. Description des registres matériels utilisés (GPIO, I²S). Diagrammes de séquence et d'état des composants logiciels. Explication des algorithmes audio (avec les formules mathématiques si nécessaire). Explication des outils nécessaires et du procédé de compilation et d'installation sur la machine cible.
+
+
+<div style="page-break-before: always;"></div>
+
+# 4 - Modalités d'organisation
 ## Rôles des intervenants
 
 Monsieur Rio joue le rôle de client pour le projet final, mais il est également encadrant nous permettant d’arriver à la bonne compréhension du sujet pour réussir au mieux le synthétiseur.
