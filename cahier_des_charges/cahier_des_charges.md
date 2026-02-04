@@ -34,44 +34,48 @@
 <table width=100%>
   <tr>
     <td align="left">
-        Superviseur : <br>  Mr Emmanuel RIO 
+        Superviseur : <br>  M. Hugues Cassé <br>
+        Client : <br> Emmanuel Rio <br>
     </td>
     <td align="right">
         Version 1 :<br> 12/10/2025
     </td>
+    <td align="right">
+        Version 2 :<br> 1/12/2025
+    </td>
+    <td align="right">
+        Version 3 :<br> 17/12/2025
+    </td>
   </tr>
 </table>
+
+<div style="page-break-before: always;"></div>
 
 # Sommaire
 
 <!-- TOC -->
 
 - [Sommaire](#sommaire)
-- [1 - Exposé introductif](#1---exposé-introductif)
+- [1 - Exposé introductif](#1---Exposé-introductif)
   - [Contexte](#contexte)
   - [Objectifs](#objectifs)
-- [2 - Analyse de l'existant et des risques :](#2---analyse-de-lexistant-et-des-risques-)
-  - [Contraintes organisationnelles :](#contraintes-organisationnelles-)
-  - [Contraintes techniques :](#contraintes-techniques-)
-  - [Contraintes humaines :](#contraintes-humaines-)
-  - [Contraintes financières :](#contraintes-financières-)
-- [3 - Analyse des nouveaux besoins](#3---analyse-des-nouveaux-besoins)
-  - [Besoins fonctionnels](#besoins-fonctionnels)
-  - [Besoins non-fonctionnels](#besoins-non-fonctionnels)
-- [4 - Description de la solution](#4---description-de-la-solution)
+- [2 - Analyse de l'existant et des risques](#2---Analyse-de-lexistant-et-des-risques)
+  - [Contraintes organisationnelles :](#contraintes-organisationnelles)
+  - [Contraintes techniques :](#contraintes-techniques)
+  - [Contraintes humaines :](#contraintes-humaines)
+  - [Contraintes financières :](#contraintes-financières)
+- [3 - Description de la solution](#3---description-de-la-solution)
   - [Cas d'utilisation](#cas-dutilisation)
-    - [Cas nominaux :](#cas-nominaux-)
-    - [Cas particuliers :](#cas-particuliers-)
+    - [Cas nominaux :](#cas-nominaux)
+    - [Cas particuliers :](#cas-particuliers)
   - [Maquette](#maquette)
   - [Nouveaux besoins](#nouveaux-besoins)
   - [Identification des risques](#identification-des-risques)
   - [Matériels mis en œuvre](#matériels-mis-en-œuvre)
   - [Contraintes additionnelles](#contraintes-additionnelles)
   - [Modalités de déploiement](#modalités-de-déploiement)
-    - [Installation](#installation)
-    - [Formation](#formation)
     - [Documentation](#documentation)
-- [5 - Modalités d'organisation](#5---modalités-dorganisation)
+- [4 - Modalités d'organisation](#4---modalités-dorganisation)
   - [Rôles des intervenants](#rôles-des-intervenants)
   - [Découpage en tâche, assignation, programmation (Gantt)](#découpage-en-tâche-assignation-programmation-gantt)
   - [Communication avec le client/superviseur](#communication-avec-le-clientsuperviseur)
@@ -85,6 +89,7 @@
 <br>
 <br>
 
+<div style="page-break-before: always;"></div>
 
 # 1 - Exposé introductif
 
@@ -95,26 +100,28 @@ Il s’agit de concevoir et réaliser un synthétiseur sonore numérique sur une
 
 Ce projet combine des aspects techniques comme la programmation bare-metal, la gestion d’interfaces matérielles mais aussi un aspect créatif avec différentes sorties sonores, un enrichissement de l’interface permettant de proposer un synthétiseur plus complet et de choisir une qualité de rendu sonore.
 
-Le développement se fera en bare-metal sur une carte Raspberry PI avec la librairie Circle permettant de simplifier le code bare-metal de l’environnement grâce à l’accès direct aux périphériques.
-Les échantillonages de la fréquence sonore seront transmis via le protocole I²S vers un DAC qui va ensuite les convertir en signal analogique sur cable jack.
+Le développement se fera en bare-metal sur une carte Raspberry PI sans aucune librairie externe. Le développement initial prévoyait l'intégration de la librairie Circle pour faciliter l'écriture de code bare-metal via un accès direct aux périphériques. Néanmoins, les phases exploratoires (proofs of concept) ont mis en évidence des difficultés de manipulation de celle-ci, conduisant à son abandon.
+Les échantillonnages du signal sonore seront transmis via le protocole Inter-IC Sound ($I^{2}S$) vers un convertisseur numérique analogique (Digital Analog Converter) qui va ensuite les convertir en signal analogique au niveau ligne.
 
-Ce cadre permet de rencontrer les problématiques du domaine des systèmes embarqués avec les contraintes de temps réel, de la gestion des périphériques et d’une optimisation du code.
+Ce cadre permet de rencontrer les problématiques du domaine des systèmes embarqués avec les contraintes de temps réel,et de la gestion des périphériques.
 
-Pour ce qui est de l'interface utilisateur, le choix était libre tant que une action de l'utilisateur menait à la construction d'un son. Ainsi, pour la réalisation de ce projet, nous avons décidé d'implémenter une interface utilisateur semblable à un piano ou synthé. Des touches de claviers représenteront les différentes notes, et d'autres touches supplémentaires pouront être utilisées pour la configuration du son rendu.  
+Pour ce qui est de l'interface utilisateur, le choix était libre tant que une action de l'utilisateur menait à la synthèse du son avec faible latence. Ainsi, pour la réalisation de ce projet, nous avons décidé d'implémenter une interface utilisateur semblable à un synthétiseur. Des touches de claviers représenteront les différentes notes, et d'autres touches supplémentaires pouront être utilisées pour la configuration du son rendu.  
 
 ## Objectifs
 
 L’objectif de ce projet est de concevoir un système complet de synthèse sonore embarqué allant de la génération d'un signal audio jusqu'à son contrôle via une interface physique.
 
 Le résultat attendu comprend :
-- La génération d’un son prédéfini
-- Une latence très faible (< 10ms) entre le déclanchement et la production du son
+- La génération d’un son prédéfini.
+- Une latence très faible (< 10ms) entre le déclanchement et la production du son.
 
 Le projet doit également démontrer la maîtrise de la programmation bare metal sur Raspberry Pi, une gestion d’interface matérielles (GPIO, I²S, DAC), la mise en oeuvre d’algorithmes de synthèses sonores ainsi qu’une documentation complête expliquant le fonctionnement du synthétiseur.
 
-# 2 - Analyse de l'existant et des risques : 
+<div style="page-break-before: always;"></div>
 
-## Contraintes organisationnelles : 
+# 2 - Analyse de l'existant et des risques
+
+## Contraintes organisationnelles 
 
 La version finale du cahier des charges ci-présent doit être remise début décembre. Pour garantir l’optimalité de celui-ci, des rendus intermédiaires bi-mensuels seront livrés aux encadrants du projet.
 La partie technique du projet doit être achevée avant la fin du second semestre.
@@ -125,11 +132,11 @@ Pour continer, nous devons suivres plusieurs methodes organisationnelles dont un
 
 Finalement, des réunions régulière doivent être organisées entre le groupe et son superviseur. L'interval de temps entre les réunions peut varier en fonction de l'avancée dans le travail, mais un contacte doit être établit au moins 1 fois par mois.
 
-## Contraintes techniques :
+## Contraintes techniques 
 
 Le matériel utilisé lors du projet n’ayant pas été étudié auparavant par l’ensemble des membres, une mise à niveau peut s'imposer afin que tous puissent le manipuler correctement. Si la mise à niveau trop complexe, cela pourait ainsi retarder l’avancée du projet.  
 
-La définition et le test d’un Proof of Concept (POC) en amont du projet est nécessaire afin d’éviter toute mauvaise surprise quant à l’interopérabilité des composants choisis et le fonctionnement de la solution.  
+La définition et le test d’un *Proof of Concept* (POC) en amont du projet est nécessaire afin d’éviter toute mauvaise surprise quant à l’interopérabilité des composants choisis et le fonctionnement de la solution.  
 
 L’architecture du système devra être modulaire et extensible, permettant l’intégration de nouveaux modules ou fonctionnalités destinées à l’implémentation d’instruments de musique supplémentaires.  
 
@@ -140,7 +147,8 @@ Le projet étant amené à être repris par l’encadrant ou par d’autres étu
 Le projet s’articulant autour d’un matériel physique, l’ensemble de l’équipe à besoin d’être présent physiquement pour effectuer les différents tests. Cela risque d'empêcher le travail à distance si un partage des ressource n'est pas organisé au préalable.
 
 La réussite du projet repose sur la collaboration et l’investissement de l’ensemble des membres de l’équipe. Les différences de niveau technique, disponibilité et motivation peuvent représenter un frein à la bonne avancée du projet.
-- L’absence ou incapacité de travail d’un membre du groupe est un risque toujours présent, auquel cas, les autres membres devraient pouvoir prendre le relais et repenser la répartition.
+
+L’absence ou incapacité de travail d’un membre du groupe est un risque toujours présent, auquel cas, les autres membres devraient pouvoir prendre le relais et repenser la répartition.
 
 Une répartition claire et équilibrée des tâches ainsi qu’une communication régulière sont essentielles pour garantir une progression harmonieuse et un projet réussi.
 
@@ -150,27 +158,22 @@ Le budget initial du projet doit être inférieur à la valeur transmise par l�
 
 Le projet s’articule autour d’un microcontrôleur dont le prix peut être élevé et le remplacement lent voire inaccessible. Une attention particulière devra être portée à la manipulation des équipements afin d’éviter toute dégradation matérielle susceptible d’engendrer des dépenses supplémentaires ou des retards. Une solution de secours serait d'emprunter le matériel disponible dans la salle d’étude U3-305.
 
-# 3 - Analyse des nouveaux besoins
+<div style="page-break-before: always;"></div>
 
-## Besoins fonctionnels
-[TODO]
-## Besoins non-fonctionnels
-[TODO]
-
-# 4 - Description de la solution
+# 3 - Description de la solution
 
 ## Cas d'utilisation
 
 ### Cas nominaux :
-- UC1 : L’utilisateur appuie sur une touche (clavier d’un octave seulement) associé à une certaine note de musique. Cette note sera audible via une sortie jack dès l'appuie sur la touche.
-  - UC1bis : possibilité de superposer différentes notes quand on appuie sur plusieurs boutons en même temps.
-- UC2 : au relâchement de la touche par l’utilisateur, arrêt ou décroissance de l’amplitude du signal jusqu'à que le son devienne inaudible.
-- UC3 : l’utilisateur à la possibilité d'appuyer sur deux touches supplémentaires : un bouton permettra d'augmenter l'octave de la note, tandis que l'autre la diminue.
+- UC1 : *(Synthèse monophonique)* L’utilisateur appuie sur une touche (clavier d’un octave seulement) associé à une certaine note de musique. Cette note sera audible via une sortie jack dès l'appuie sur la touche.
+  - UC1bis : *(Synthèse polyphonique)* possibilité de superposer différentes notes quand on appuie sur plusieurs boutons en même temps.
+- UC2 : au relâchement de la touche par l’utilisateur, l’arrêt du son est géré par l’implémentation de la phase Release d’une enveloppe d’amplitude de type ADSR, assurant une décroissance progressive du signal jusqu’à ce qu’il devienne inaudible.
+- UC3 : l’utilisateur a la possibilité d'appuyer sur deux touches supplémentaires : un bouton permettra d'ajouter une octave de la note, tandis que l'autre permet de retrancher une octave.
 - UC4 : l’utilisateur peut utiliser un potentiomètre (ou autre entrée analogique) pour régler le volume sonore de sortie.
 
 ### Cas particuliers :
-- UC5 : l’utilisateur peut appuyer sur un bouton specifique pour changer le mode des son ressortis : un premier mode permet d'entendre des notes de musiques (DO, Ré, Mi, Fa, Sol, La, Si) tandis qu'un autre mode peut associer un son différent à chaque touche.
-- UC6 : l’utilisateur peut en appuyant sur un bouton, faire un effet de sustain qui va prolonger le son (enveloppe ADSR).
+- UC5 : l’utilisateur peut appuyer sur un bouton specifique pour changer le mode des sons ressortis : un premier mode permet d'entendre des notes de musiques (DO, Ré, Mi, Fa, Sol, La, Si) tandis qu'un autre mode peut associer un son différent à chaque touche.
+- UC6 : La durée d'appui sur la touche aura pour effet de maintenir l'audio, ce qui va prolonger le son (partie AD de ADSR).
 
 ## Maquette 
 
@@ -180,7 +183,7 @@ La maquette de cette solution sera composée du matériel disponible en salle 30
 <div align="center"><img src="./images/PoC.drawio.png" alt="Schema du PoC"> </div>
 
 <br>
-Une fois la faisabilité confirmée, la solution s’articulera autour du même schéma que le PoC :  un Raspberry Pi relié à un DAC  externe pour l’émission des signaux sonores. En plus de cela, nous devont ajouter plusieurs boutons. Ces boutons représenteront les différentes touches du synthétiseur, chacune associée à une note ou à une fonction spécifique. Ils doivent être reliés a la Raspberry afin de controler la sortie sonore attendue.
+Une fois la faisabilité confirmée, la solution s’articulera autour du même schéma que le PoC :  un Raspberry Pi relié à un DAC  externe pour l’émission des signaux sonores. En plus de cela, nous devont ajouter plusieurs boutons. Ces boutons représenteront les différentes touches du synthétiseur, chacune associée à une note ou à une fonction spécifique. Ils doivent être reliés à la Raspberry afin de contrôler la sortie sonore attendue.
 
 Dans un premier temps, les tests seront effectués sur breadboard afin de valider le câblage, la communication entre les composants et la stabilité du signal audio. 
 La validation de cette solution, nous permettra le transfert du montage sur un PCB, et résulte sur une solution compacte et sûre, facilitant ainsi la manipulation et les tests à long terme.
@@ -224,8 +227,8 @@ Pour l’élaboration de notre projet, nous avons besoin de ces matériaux :
 - LED
 - Module DAC I2S PCM5102 (sortie jack)
 - Enceinte active avec entrée jack 3.5 mm
-- Raspberry Pi 4
-- Alimentation secteur 5V 2.5A pour Raspberry Pi
+- Raspberry Pi 3
+- Alimentation secteur 5V 2.5A pour  Pi
 - carte microcontrolleur PCB
 
 ## Contraintes additionnelles 
@@ -233,29 +236,37 @@ Pour l’élaboration de notre projet, nous avons besoin de ces matériaux :
 
 En addition des contraintes organisationnelles, techniques, humaines et financières, nous pouvons citer plusieurs contraintes qui peuvent s’appliquer lors de la mise en œuvre et la réalisation du projet.
 - sécurité  : il serait souhaitable que le produit soit résistant face à diverses attaques  cherchant à modifier ou détruire l’utilisation du produit tel que décrit dans ce cahier des charges. 
-- fiabilité : le produit doit fonctionner comme exigé sur une longue période de temps et ne pas être susceptible à des dysfonctionnement. De même, nous devons nous assurer que l’utilisation de celui-ci ne risque en aucun cas la création d’un accident susceptible de mettre en danger la vie de son utilisateur. 
-- calcul : le calcul des fréquences se réalise normalement en utilisant des nombres flottants ( entre -1 et 1). Le matériel utilisé pour la preuve de concept et la réalisation du projet final comporte des FPU ( Floating Point Unit ) qu’il serait judicieux d’utiliser pour les opération de calcul de flottants. Cependant, un risque subsiste que l’utilisation des FPU ou la compatibilité des résultats avec le protocole I2S nous contraignent à utiliser des calculs entiers.
+- fiabilité : le produit doit fonctionner comme exigé sur une longue période de temps et ne pas être susceptible à des dysfonctionnements. De même, nous devons nous assurer que l’utilisation de celui-ci ne risque en aucun cas la création d’un accident susceptible de mettre en danger la vie de son utilisateur. 
+- calcul : Dans notre cas, il ne s’agit pas réellement de calculer les fréquences, celles-ci étant fixes et peu nombreuses et pouvant simplement être stockées dans un tableau statique, mais bien de calculer les échantillons audio au fil de l’exécution ; le microcontrôleur disposant d’une FPU, il est préférable d’effectuer toute la synthèse en nombres flottants, beaucoup plus simples à manipuler que les entiers, puis de ne convertir chaque échantillon qu’au dernier moment, lors du remplissage des buffers I2S, en passant d’une valeur flottante comprise entre –1 et 1 à un entier situé dans la plage attendue par l’interface, l’I2S ne posant aucune contrainte sur la méthode de calcul mais seulement sur le format final des données.
+- Développement bare-metal : Le système doit être développé en bare-metal, sans dépendance à des bibliothèques externes (libCircle), afin de garantir la maîtrise complète de l’initialisation matérielle et du pipeline audio.
+
 
 ## Modalités de déploiement 
 
-### Installation
-### Formation
 ### Documentation
 
+- **Documentation Utilisateur** :	Guide simple pour l'utilisateur final du synthétiseur : Fonctionnement des touches/boutons. Réglage du volume. Procédure de démarrage et d'arrêt.
 
-# 5 - Modalités d'organisation
+- **Documentation Technique	Pour les développeurs/mainteneurs** : Structure du code et conventions. Description des registres matériels utilisés (GPIO, I²S). Diagrammes de séquence et d'état des composants logiciels. Explication des algorithmes audio (avec les formules mathématiques si nécessaire). Explication des outils nécessaires et du procédé de compilation et d'installation sur la machine cible.
+
+
+<div style="page-break-before: always;"></div>
+
+# 4 - Modalités d'organisation
 ## Rôles des intervenants
 
-Monsieur Rio joue le rôle de client pour le projet final mais il est également un encadrant nous permettant d’arriver à la bonne compréhension du sujet pour réussir au mieux le synthétiseur.
+Monsieur Rio joue le rôle de client pour le projet final, mais il est également encadrant nous permettant d’arriver à la bonne compréhension du sujet pour réussir au mieux le synthétiseur.
 Monsieur Cassé est superviseur, son travail est d’accompagner l’équipe tout au long de la réalisation du projet. Il guide notre groupe dans leurs choix techniques et méthodologiques, s’assure que les objectifs fixés sont atteints et que le travail respecte les contraintes de temps et de qualité. De plus, il est aussi notre fournisseur pour les composants nécessaires à la réalisation du produit final.
 
 ## Découpage en tâche, assignation, programmation (Gantt)
 
 Utilisation d’un kanban pour l’assignation des tâches et l’ordre de priorités de celles-ci. Via ce kanban, un diagramme de Gantt est créé pour suivre les deadlines des tâches assignées.
 
+Le diagramme de Gantt ainsi que le kanban sont accessibles depuis le lien suivant : https://github.com/orgs/BotWaveUT/projects/1/views/3
+
 ## Communication avec le client/superviseur
 
-Le chef d’équipe gère la communication, les rendus mais via le serveur Discord, tous les membres peuvent discuter du projet avec Monsieur Rio pour avancer plus rapidement.
+Le chef d’équipe gère la communication offcielle ainsi que les différents rendus.Tandis qu'à travers le serveur Discord créé à cet effet, tous les membres peuvent discuter du projet avec Monsieur Rio pour avancer plus rapidement.
 Les membres du groupe s’organisent pour s’affecter des tâches et plusieurs fois par semaine des réunions en interne sont organisées pour faire le point sur l’avancée des tâches, les blocages et les priorités.  
 Les décisions importantes sont notées dans un document de suivi validé par tous les membres.
 
@@ -263,7 +274,7 @@ Les décisions importantes sont notées dans un document de suivi validé par to
 
 Utilisation d’un serveur Discord pour simplifier la communication entre les membres du groupe et le client, ainsi tout le monde peut avoir accès aux échanges pour mieux comprendre les besoins et demander de l’aide.  
 Un google Drive est mis en place pour stocker tous les fichiers importants permettant le bon déroulement du projet.  
-Une organisation Github a été créée afin d’avoir plusieurs dépôts pour le projet, la documentation. Ainsi nous pouvons centraliser la gestion du projet depuis Github, gérer les priorités via le kanban de l’organisation.
+Une organisation Github a été créée afin d’avoir plusieurs dépôts pour le projet, la documentation. Ainsi, nous pouvons centraliser la gestion du projet depuis Github et gérer les priorités via le kanban de l’organisation.
 
 ## Procédure de gestion des risques
 
