@@ -2,8 +2,18 @@
 
 Sommaire:
 
+- [1 - Organisation du projet](#organisation-du-projet-)
+- [2 - Matériel](#matériel)
+  - [Kernel](#Kernel)
+  - [Activation de la FPU](#activation-de-la-fpu)
+  - [Fonctionnement du PCM](#fonctionnement-du-pcm)
+  - [Fonctionnement de la DMA](#fonctionnement-de-la-dma)
+  - [Contraintes financières :](#contraintes-financières)
+  - [Traitement des Interruptions](#traitement-des-interruptions)
+  - [Traitement du clavier]()
+- [3 - Traitement du signal](#traitement-du-signal)
 
-### Organistion du projet :
+### Organisation du projet :
 
 - **boot**      -> dossier à copier sur la carte SD pour booter sur la raspberry pi 3B
 - **src**       -> dossier contenant les fichiers sources du projet
@@ -13,6 +23,12 @@ Sommaire:
 ## Matériel
 
 ### Kernel
+
+Nous avons récupéré le kernel réalisé par Docteur Millian Poquet durant les cours de *couches logicielles basses* qui sont accessibles via : https://github.com/mpoquet/raspberry-pi-os-qemu/tree/master/src/lesson03
+
+Nous avons pris le kernel à partir de la leçon 3 car nous ne travaillons uniquement au niveau de privilège EL1 et avec la gestion des interruptions pour gérer la DMA.
+
+Nous avons juste modifié ce kernel pour désactiver les interruptions timers qui ne sont pas utile pour la suite du projet.
 
 ---
 
@@ -74,6 +90,10 @@ static void pcm_init_gpio()
 ```
 
 La fonction `pcm_init_gpio()` permet d'initialiser les broches 18, 19, 20, 21 en mode ALT0 associé à la valeur 4.
+
+![alt text](img_doc/gpio.png)
+
+![alt text](img_doc/alternate_pin.png)
 
 ```c
 FSEL1 &= ~(((0b111) << 24) | ((0b111) << 27));
@@ -279,17 +299,17 @@ struct Control_Block {
 
 Voici la structure qui doit être alignée sur 256 bits avec un padding de 64 bits.
 
-Un block de contrôle stocke l'adresse source des données à récupérer, l'adresse de destination qui doit recevoir les données, le nombre de données à envoyer et l'adresse du block de contrôle prochain qui prendra le relai lorsque l'actuel aura terminé d'envoyer toutes les données.
+Un bloc de contrôle stocke l'adresse source des données à récupérer, l'adresse de destination qui doit recevoir les données, le nombre de données à envoyer et l'adresse du bloc de contrôle prochain qui prendra le relai lorsque l'actuel aura terminé d'envoyer toutes les données.
 
 La DMA possède également un registre **ENABLE Register** qui permet d'activer les canaux qui doivent être utilisés.
 
 Les données qui doivent être envoyés par la DMA sont stockées dans un tableau de 2048 éléments et la DMA parcourira l'ensemble du tableau pour envoyer chaque élément vers le PCM.
 
-Pour éviter d'écrire les données au même endroit que la DMA envoie les valeurs, nous utilisons 2 blocks de contrôle qui se partagent le tableau en 2 (un pointant vers l'indice 0 et l'autre vers 1024) et dès qu'un block à fini de parcourir sa moitié, il envoie une interruption et amène l'autre block dans le canal pour traiter l'autre partie du tableau.
+Pour éviter d'écrire les données au même endroit que la DMA envoie les valeurs, nous utilisons 2 blocs de contrôle qui se partagent le tableau en 2 (un pointant vers l'indice 0 et l'autre vers 1024) et dès qu'un bloc à fini de parcourir sa moitié, il envoie une interruption et amène l'autre bloc dans le canal pour traiter l'autre partie du tableau.
 
 Ainsi nous écrivons dans la partie qui n'est pas traité par la DMA.
 
-Le fait d'avoir 2 blocks de contrôle permet de gérer un buffer de manière circulaire.
+Le fait d'avoir 2 blocs de contrôle permet de gérer un buffer de manière circulaire.
 
 La gestion de la DMA de la raspberry pi se trouve dans les fichiers *dma.c* et *dma.h*.
 
@@ -314,16 +334,91 @@ void dma_init_controlBlock() {
 }
 ```
 
-Cette fonction va initialiser les 2 blocks de contrôle que nous utilisons pour accéder au tableau, rediriger vers la FIFO TX du PCM. La taille correspond à la moitié du tableau dans *TXFR_LEN*. le *\*4* indique le nombre de d'octet au total à envoyer.
+Cette fonction va initialiser les 2 blocs de contrôle que nous utilisons pour accéder au tableau, rediriger vers la FIFO TX du PCM. La taille correspond à la moitié du tableau dans *TXFR_LEN*. le *\*4* indique le nombre de d'octet au total à envoyer.
 
 La partie *STRIDE* permet de gérer des valeurs organisées sur des tableaux à 2 dimensions, dans notre cas, ce n'est pas nécessaire.
 
 Le registre *TI* permet de gérer les informations de transmission de la DMA vers la destination.
-La DMA attend le signal du PCM pour envoyer les données, et va parcourir le tableau en incrémentant la source.
+La DMA attend le signal du PCM pour envoyer les données, et va parcourir le tableau en incrémentant la source et en direction du module PCM.
 
+> /!\ La raspberry pi fonctionne différemment avec une plage mémoire accessible pour le CPU et pour les périphériques.
 
+![alt text](img_doc/memory_map.png)
 
+Donc en initialisant les structures de contrôle, il faut rajouter `0xC0000000` car c'est à partir de cette adresse que ce trouve les sections du programme et la section data ou se trouve le tableau correspondant au buffer. (C'est la partie SDRAM adressable par ARM Physical Addresses).
 
+---
+```c
+void dma_init() {
+    *(volatile unsigned*)DMA_ENABLE_REG = (1 << 1);    //enable DMA engine chanel 0
+    dma_init_controlBlock();
+
+    *(volatile unsigned*)DMA_CS_1 = (1 << 31); //RESET DMA CHANEL 1 to clear
+
+    while(*(volatile unsigned*)DMA_CS_1 & (1 << 31)); //wait the bit set at 0
+
+    *(volatile unsigned*)DMA_CONBLK_AD_1 = (unsigned)((unsigned long)(&DMA_BLOCK_1) | 0xC0000000);
+    *(volatile unsigned*)DMA_CS_1 = 1; //enable DMA chanel 0
+}
+```
+
+Cette fonction permet d'activer l'alimentation du canal à utiliser grâce à **ENABLE_REGISTER** en mettant 1 au bit 1 pour le canal associé.
+
+Avec l'appel de la fonction vu précédemment.
+
+Et ensuite dans le registre CONBLK du canal 1 on y met l'adresse de la structure de contrôle associé à la première partie du tableau et en modifiant CS à 1, on active le canal pour faire fonctionner la DMA.
+
+---
+
+### Traitement des Interruptions
+
+Notre DMA permet de générer des interruptions pour connaître quelle partie du tableau est en train d'être traité par la DMA pour modifier l'autre partie qui est au repos.
+
+```c
+void dma_enable_interrupt() {
+    *(volatile unsigned*)ENABLE_IRQS_1 |= (1 << 17); //enable IRQ for DMA CANAL 1
+}
+
+void handler_dma_interrupt() {
+    if (*(volatile unsigned*)DMA_CONBLK_AD_1 == (unsigned)((unsigned long)(&DMA_BLOCK_1) | 0xC0000000)) {
+        second_half_empty = 1;
+    } else if (*(volatile unsigned*)DMA_CONBLK_AD_1 == (unsigned)((unsigned long)(&DMA_BLOCK_2) | 0xC0000000)){
+        first_half_empty = 1;
+    }
+
+    *(volatile unsigned*)DMA_CS_1 |= (1 << 2);
+}
+```
+
+La première fonction permet d'activer l'envoi des interruption par le canal 1 de la DMA.
+
+La deuxième fonction permet de gérer l'interruption générée par la DMA en regardant quelle est l'adresse du bloc de contrôle pour modifier l'état d'une variable permettant ensuite dans la fonction main d'écrire dans la partie du buffer disponible.
+
+```c
+void handle_irq(void)
+{
+    // Each Core has its own pending local intrrupts register
+    /*unsigned int irq = get32(INT_SOURCE_0);
+    switch (irq) {
+        case (GENERIC_TIMER_INTERRUPT):
+            handle_generic_timer_irq();
+            break;
+        default:
+            printf("Unknown pending irq: %x\r\n", irq);
+    }*/
+   handler_dma_interrupt();
+}
+```
+
+C'est dans la fonction `handle_irq` qui est appelé à chaque interruption lancée au niveau de privilège EL1 que la gestion des interruptions de la DMA est gérée.
+
+---
+
+### Traitement du clavier
+
+Tout le traitement du clavier se trouve dans les fichiers *input.c* et *input.h*.
+
+Initialiser le clavier avec les broches GPIOS correspondantes avec la fonction `input_init()`
 
 
 ## Traitement du signal
