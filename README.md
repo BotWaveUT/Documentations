@@ -11,7 +11,7 @@ Sommaire:
   - [Contraintes financières :](#contraintes-financières)
   - [Traitement des Interruptions](#traitement-des-interruptions)
   - [Traitement du clavier]()
-- [3 - Traitement du signal](#traitement-du-signal)
+- [Annexe](#annexe)
 
 ### Organisation du projet :
 
@@ -421,4 +421,9 @@ Tout le traitement du clavier se trouve dans les fichiers *input.c* et *input.h*
 Initialiser le clavier avec les broches GPIOS correspondantes avec la fonction `input_init()`
 
 
-## Traitement du signal
+## Annexe
+
+Plus d’information et explications peuvent être trouvées dans :
+- le rapport du projet
+- le poster
+- le diaporama de présentation
